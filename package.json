@@ -1,1 +1,27 @@
-{\n  "name": "mev-bot",\n  "version": "1.0.0",\n  "description": "A MEV bot for Ethereum networks.",\n  "main": "index.js",\n  "scripts": {\n    "start": "node index.js"\n  },\n  "dependencies": {\n    "ethers": "^5.6.0",\n    "web3": "^1.7.0",\n    "dotenv": "^10.0.0",\n    "axios": "^0.21.1",\n    "bignumber.js": "^9.0.1",\n    "@uniswap/sdk": "^3.0.0",\n    "@ethersproject/providers": "^5.6.0",\n    "@openzeppelin/contracts": "^4.0.0"\n  },\n  "devDependencies": {\n    "jest": "^27.0.0",\n    "eslint": "^7.32.0"\n  }\n}
+{
+  "name": "next-netlify-platform-starter",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^10.4.1",
+    "blobshape": "^1.0.0",
+    "bright": "^1.0.0",
+    "markdown-to-jsx": "^7.7.16",
+    "next": "^16.0.7",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "unique-names-generator": "^4.7.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.15",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint": "9.0.0",
+    "eslint-config-next": "^16.0.7",
+    "postcss": "^8.4.36",
+    "tailwindcss": "^4.1.15"
+  }
+}
