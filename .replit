@@ -1,0 +1,11 @@
+run = "npm install && npm run dev"
+entrypoint = "app/page.jsx"
+hidden = [".config", ".next", "node_modules"]
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_11"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
