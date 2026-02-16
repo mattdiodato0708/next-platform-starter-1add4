@@ -39,21 +39,21 @@ Then open the `.env` file in your text editor and replace the placeholder values
 
 | Variable | Where to put it | How to get it |
 |---|---|---|
-| `PRIVATE_KEY` | Replace `your_private_key_here` | Export from your Ethereum wallet (e.g., MetaMask > Account Details > Export Private Key) |
-| `RPC_ENDPOINT` | Replace `https://your_rpc_endpoint_here` | Sign up at [Infura](https://infura.io) or [Alchemy](https://alchemy.com) and create a project to get a WebSocket or HTTPS endpoint |
+| `PRIVATE_KEY` | Replace `your_private_key_here` | Export from your Ethereum wallet. **Use only a testing wallet with minimal funds** — for production, use a hardware wallet or key management service |
+| `RPC_ENDPOINT` | Replace `https://your_rpc_endpoint_here` | Sign up at [Infura](https://infura.io) or [Alchemy](https://alchemy.com) and create a project to get a **WebSocket** (`wss://`) endpoint |
 | `DATABASE_URL` | Replace the full connection string | Set up a PostgreSQL database and use its connection URL |
 | `BOT_CONFIG` | Update the JSON values | Customize the bot configuration options as needed |
 
 **Example `.env` file** (do **not** commit this file — it contains secrets):
 
 ```
-PRIVATE_KEY=0xabc123...your_actual_private_key
-RPC_ENDPOINT=https://mainnet.infura.io/v3/your_project_id
+PRIVATE_KEY=0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890
+RPC_ENDPOINT=wss://mainnet.infura.io/ws/v3/your_project_id
 DATABASE_URL=postgres://myuser:mypassword@localhost:5432/mev_bot_db
 BOT_CONFIG={"option1": "value1", "option2": "value2", "option3": "value3"}
 ```
 
-> ⚠️ **Important:** Never share your private key or commit your `.env` file to version control. The `.gitignore` file already excludes `.env` from being tracked.
+> ⚠️ **Important:** Never share your private key or commit your `.env` file to version control. The `.gitignore` file already excludes `.env` from being tracked. Only use a **testing wallet with minimal funds** — never store production private keys in plaintext files.
 
 ### Step 4: Set up the database
 
@@ -72,11 +72,14 @@ Alternatively, you can modify the code to read from the `DATABASE_URL` environme
 
 ### Step 5: Update the WebSocket provider
 
-In `bot/index.js`, replace the Infura WebSocket URL with your own:
+In `bot/index.js`, replace the hardcoded Infura WebSocket URL with your `RPC_ENDPOINT` environment variable so you only need to configure it in one place (your `.env` file):
 
 ```js
+// Change this:
 const provider = new ethers.providers.WebSocketProvider('wss://mainnet.infura.io/ws/v3/YOUR_INFURA_PROJECT_ID');
-// Replace YOUR_INFURA_PROJECT_ID with the project ID from your Infura dashboard
+
+// To this:
+const provider = new ethers.providers.WebSocketProvider(process.env.RPC_ENDPOINT);
 ```
 
 ### Step 6: Run the bot
