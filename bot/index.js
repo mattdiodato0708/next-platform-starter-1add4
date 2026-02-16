@@ -32,6 +32,8 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 // Configuration
 const MIN_PROFIT_THRESHOLD = ethers.utils.parseEther(process.env.MIN_PROFIT_THRESHOLD_ETH || '0.01');
 const GAS_PRICE_MULTIPLIER = parseFloat(process.env.GAS_PRICE_MULTIPLIER || '1.1');
+const LARGE_TRADE_THRESHOLD_ETH = 1.0; // Threshold for detecting significant trades
+const SANDWICH_PROFIT_PERCENTAGE = 1; // Expected profit percentage for sandwich attacks
 
 console.log('🤖 MEV Bot Starting...');
 console.log('Wallet Address:', wallet.address);
@@ -72,7 +74,7 @@ function isPotentialSandwich(transaction) {
     // Large trades create price impact that can be exploited
     if (transaction.value) {
         const valueInEth = ethers.utils.formatEther(transaction.value);
-        if (parseFloat(valueInEth) > 1.0) { // Trades over 1 ETH
+        if (parseFloat(valueInEth) > LARGE_TRADE_THRESHOLD_ETH) {
             return true;
         }
     }
@@ -187,9 +189,9 @@ async function calculateProfitability(transaction) {
         
         const transactionValue = transaction.value || ethers.BigNumber.from('0');
         
-        // Rough estimate: assume 1% profit on transaction value for sandwich attacks
+        // Rough estimate: assume configured profit percentage on transaction value for sandwich attacks
         // This is a simplified heuristic - real calculation requires simulation
-        const estimatedProfit = transactionValue.mul(1).div(100); // 1% of transaction value
+        const estimatedProfit = transactionValue.mul(SANDWICH_PROFIT_PERCENTAGE).div(100);
         
         // Net profit = estimated profit - gas cost
         const netProfit = estimatedProfit.sub(gasCost);

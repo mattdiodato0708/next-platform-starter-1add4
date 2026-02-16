@@ -212,8 +212,8 @@ The bot will:
 
 - [Ethereum MEV Documentation](https://ethereum.org/en/developers/docs/mev/)
 - [Flashbots Documentation](https://docs.flashbots.net/)
-- [Uniswap V2 Documentation](https://docs.uniswap.org/protocol/V2/introduction)
-- [Uniswap V3 Documentation](https://docs.uniswap.org/protocol/introduction)
+- [Uniswap V2 Documentation](https://docs.uniswap.org/contracts/v2/overview)
+- [Uniswap V3 Documentation](https://docs.uniswap.org/contracts/v3/overview)
 - [ethers.js Documentation](https://docs.ethers.io/)
 
 ## License
