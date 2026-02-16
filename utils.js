@@ -17,7 +17,9 @@ export function getResourceSize(url) {
 
 // Note: this only works on the server side
 export function getNetlifyContext() {
-    return process.env.CONTEXT;
+    if (process.env.CONTEXT) return process.env.CONTEXT;
+    if (process.env.NETLIFY_DEV === 'true') return 'dev';
+    return undefined;
 }
 
 export function randomInt(min, max) {
