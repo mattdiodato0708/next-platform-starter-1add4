@@ -38,3 +38,9 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# Bot environment variables
+bot/.env
+
+# Bot dependencies
+bot/node_modules
