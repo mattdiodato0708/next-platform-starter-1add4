@@ -2,9 +2,9 @@
   "name": "next-netlify-platform-starter",
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev -p $PORT",
+    "dev": "next dev -p ${PORT:-3000}",
     "build": "next build",
-    "start": "next start -p $PORT"
+    "start": "next start -p ${PORT:-3000}"
   },
   "dependencies": {
     "@netlify/blobs": "^10.4.1",
