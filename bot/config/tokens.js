@@ -1,0 +1,87 @@
+/**
+ * Token configuration
+ * Common ERC20 tokens on Ethereum mainnet
+ */
+
+const tokens = {
+  // Native
+  WETH: {
+    address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    decimals: 18,
+    symbol: 'WETH',
+    name: 'Wrapped Ether',
+  },
+
+  // Stablecoins
+  USDT: {
+    address: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    decimals: 6,
+    symbol: 'USDT',
+    name: 'Tether USD',
+  },
+  USDC: {
+    address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+    decimals: 6,
+    symbol: 'USDC',
+    name: 'USD Coin',
+  },
+  DAI: {
+    address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+    decimals: 18,
+    symbol: 'DAI',
+    name: 'Dai Stablecoin',
+  },
+
+  // DeFi tokens
+  UNI: {
+    address: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
+    decimals: 18,
+    symbol: 'UNI',
+    name: 'Uniswap',
+  },
+  LINK: {
+    address: '0x514910771AF9Ca656af840dff83E8264EcF986CA',
+    decimals: 18,
+    symbol: 'LINK',
+    name: 'ChainLink Token',
+  },
+  AAVE: {
+    address: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+    decimals: 18,
+    symbol: 'AAVE',
+    name: 'Aave Token',
+  },
+
+  // Popular tokens
+  SHIB: {
+    address: '0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE',
+    decimals: 18,
+    symbol: 'SHIB',
+    name: 'Shiba Inu',
+  },
+  PEPE: {
+    address: '0x6982508145454Ce325dDbE47a25d4ec3d2311933',
+    decimals: 18,
+    symbol: 'PEPE',
+    name: 'Pepe',
+  },
+};
+
+// Helper function to get token by address
+function getTokenByAddress(address) {
+  return Object.values(tokens).find(
+    token => token.address.toLowerCase() === address.toLowerCase()
+  );
+}
+
+// Helper function to get token decimals
+function getTokenDecimals(address) {
+  const token = getTokenByAddress(address);
+  return token ? token.decimals : 18; // Default to 18
+}
+
+module.exports = {
+  tokens,
+  getTokenByAddress,
+  getTokenDecimals,
+};

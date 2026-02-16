@@ -38,3 +38,10 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# MEV Bot specific
+/bot/logs/*.log
+/bot/node_modules
+/bot/contracts/artifacts
+/bot/contracts/cache
+/bot/contracts/deployment.json
