@@ -123,7 +123,7 @@ Transaction: ${execution.txHash || 'N/A'}
     const message = `
 🚨 CRITICAL ERROR!
 ${error.message}
-Stack: ${error.stack?.substring(0, 500) || 'N/A'}
+Stack: ${error.stack?.substring(0, 1000) || 'N/A'}
     `.trim();
 
     await this.sendAlert(message, 'error');

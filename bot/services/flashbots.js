@@ -206,9 +206,9 @@ class FlashbotsService {
   /**
    * Build transaction with coinbase payment
    */
-  buildCoinbasePaymentTx(amount, nonce) {
+  buildCoinbasePaymentTx(amount, nonce, coinbaseAddress) {
     return {
-      to: '0x0000000000000000000000000000000000000000', // Will be replaced with block.coinbase
+      to: coinbaseAddress, // Block miner address
       value: amount,
       gasLimit: 21000,
       nonce,

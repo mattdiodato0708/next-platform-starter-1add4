@@ -248,10 +248,17 @@ class ArbitrageStrategy extends BaseStrategy {
         ? reservesBuy.reserveA
         : reservesSell.reserveA;
 
-      return minReserve.div(10);
+      const optimalAmount = minReserve.div(10);
+      
+      // Validate the amount is reasonable
+      if (optimalAmount.lte(0)) {
+        return null;
+      }
+
+      return optimalAmount;
     } catch (error) {
       logger.error('Optimal amount calculation error', { error: error.message });
-      return ethers.utils.parseEther('1'); // Default to 1 ETH
+      return null;
     }
   }
 

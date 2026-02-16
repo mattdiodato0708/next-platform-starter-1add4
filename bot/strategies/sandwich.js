@@ -52,9 +52,13 @@ class SandwichStrategy extends BaseStrategy {
         return null;
       }
 
-      const slippage = amountIn.sub(tx.decoded.amountOut)
+      // Calculate slippage: (expectedOut - minAcceptable) / expectedOut
+      const expectedAmount = expectedOut[expectedOut.length - 1];
+      const minAcceptable = tx.decoded.amountOut;
+      
+      const slippage = expectedAmount.sub(minAcceptable)
         .mul(10000)
-        .div(amountIn)
+        .div(expectedAmount)
         .toNumber() / 10000;
 
       if (slippage > this.maxSlippage) {
@@ -221,15 +225,32 @@ class SandwichStrategy extends BaseStrategy {
    */
   async monitor(bundleHash) {
     try {
-      // Wait for bundle inclusion
-      // In production, implement proper monitoring
-      await new Promise(resolve => setTimeout(resolve, 12000)); // ~1 block
+      // Wait for bundle inclusion via Flashbots API
+      const stats = await this.services.flashbots.getBundleStats(bundleHash);
+      
+      if (stats) {
+        return {
+          success: true,
+          bundleHash,
+          gasUsed: stats.gasUsed || 'N/A',
+          blockNumber: stats.blockNumber || 'N/A',
+        };
+      }
+
+      // Fallback: wait for block confirmation
+      const currentBlock = await this.services.provider.getBlockNumber();
+      const targetBlock = currentBlock + 1;
+      
+      // Wait for target block
+      await new Promise((resolve) => {
+        this.services.provider.once('block', resolve);
+      });
 
       return {
         success: true,
         bundleHash,
         gasUsed: 'N/A',
-        blockNumber: 'N/A',
+        blockNumber: targetBlock,
       };
     } catch (error) {
       logger.error('Sandwich monitoring error', { error: error.message });

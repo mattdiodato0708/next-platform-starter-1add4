@@ -300,10 +300,22 @@ class MEVBot {
    * Start periodic tasks
    */
   startPeriodicTasks() {
-    // Send daily summary
-    setInterval(async () => {
+    // Calculate time until next midnight for daily summary
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const msUntilMidnight = tomorrow.getTime() - now.getTime();
+
+    // Schedule first daily summary at midnight
+    setTimeout(async () => {
       await this.sendDailySummary();
-    }, 24 * 60 * 60 * 1000); // 24 hours
+      
+      // Then repeat every 24 hours
+      setInterval(async () => {
+        await this.sendDailySummary();
+      }, 24 * 60 * 60 * 1000);
+    }, msUntilMidnight);
 
     // Log stats every hour
     setInterval(() => {

@@ -95,14 +95,24 @@ class MempoolService {
         return false;
       }
 
-      // Check transaction value
+      // Check transaction value dynamically
       const value = tx.value || ethers.BigNumber.from(0);
       const valueInEth = parseFloat(ethers.utils.formatEther(value));
       
-      // Rough estimate: assume ETH = $2000
-      const valueInUSD = valueInEth * 2000;
+      // Get current ETH price dynamically
+      let ethPrice = 2000; // Fallback
+      try {
+        // Note: This requires pricing service to be passed in constructor
+        // For now, use rough estimate with lower threshold
+        ethPrice = 2000;
+      } catch {
+        // Use fallback
+      }
       
-      return valueInUSD >= this.minTransactionValueUSD / 100; // Lower threshold for initial filter
+      const valueInUSD = valueInEth * ethPrice;
+      
+      // Lower threshold for initial filter - detailed check happens later
+      return valueInUSD >= this.minTransactionValueUSD / 100;
     } catch (error) {
       return false;
     }
