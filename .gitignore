@@ -38,3 +38,15 @@ yarn-error.log*
 
 # Local Netlify folder
 .netlify
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.env.local
+*.log
+.idea/
+.vscode/
+*.egg-info/
+dist/
+build/

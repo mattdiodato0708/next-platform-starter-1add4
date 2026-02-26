@@ -1,11 +1,12 @@
-run = "npm install && npm run dev"
-entrypoint = "app/page.jsx"
-hidden = [".config", ".next", "node_modules"]
-modules = ["nodejs-20"]
+run = "python main.py"
+language = "python3"
+entrypoint = "main.py"
 
 [nix]
-channel = "stable-24_11"
+channel = "stable-23_11"
 
-[[ports]]
-localPort = 3000
-externalPort = 80
+[env]
+PYTHONPATH = "${PYTHONPATH}:${HOME}/${REPL_SLUG}"
+
+[deployment]
+run = ["python3", "main.py"]
