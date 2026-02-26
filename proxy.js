@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export function middleware(request) {
+export function proxy(request) {
   const response = NextResponse.next();
   
   // Add security headers
@@ -14,7 +14,7 @@ export function middleware(request) {
   const pathname = request.nextUrl.pathname;
   
   // Logging for demonstration (in production, use proper logging service)
-  console.log(`[Middleware] ${request.method} ${pathname} - ${new Date().toISOString()}`);
+  console.log(`[Proxy] ${request.method} ${pathname} - ${new Date().toISOString()}`);
   
   // Example: Block access to /admin paths (demonstration only)
   if (pathname.startsWith('/admin')) {
