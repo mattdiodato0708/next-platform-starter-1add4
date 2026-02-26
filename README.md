@@ -59,3 +59,41 @@ cp .env.example .env.local
 Deploy directly to Netlify. The `netlify.toml` file is pre-configured with the correct build settings.
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/mattdiodato0708/next-platform-starter-1add4)
+
+### Deploy to Replit
+
+1. Click **Import from GitHub** on [Replit](https://replit.com)
+2. Paste the repo URL
+3. It auto-detects the `.replit` config
+4. Add your exchange API keys as Replit Secrets (environment variables)
+5. Hit **Run**
+
+### Deploy to Railway
+
+1. Connect your GitHub repo at [railway.app](https://railway.app)
+2. Railway auto-detects `railway.toml`
+3. Add environment variables in the Railway dashboard
+4. Deploys automatically on every push to `main`
+
+### Deploy to Render
+
+1. Create a new **Background Worker** on [render.com](https://render.com)
+2. Connect the GitHub repo
+3. Render uses `render.yaml` for config
+4. Add secrets in the Render dashboard
+
+### Deploy with Docker
+
+```bash
+docker build -t crypto-arb-bot .
+docker run -d --name arb-bot \
+  -e CONFIG_PATH=config.json \
+  crypto-arb-bot
+```
+
+### GitHub Actions
+
+- CI runs automatically on every push and pull request
+- Validates that the config loads correctly
+- Compiles all Python files
+- Builds the Docker image on the `main` branch

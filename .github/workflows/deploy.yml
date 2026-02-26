@@ -1,0 +1,41 @@
+name: CI & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python -c "from config import CONFIG; print('Config OK')"
+      - run: python -m py_compile main.py
+      - run: python -m py_compile core/safety.py
+      - run: python -m py_compile core/exchange.py
+      - run: python -m py_compile core/logger.py
+      - run: python -m py_compile strategies/funding_arb.py
+      - run: python -m py_compile strategies/ambassador_arb.py
+
+  docker-build:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: crypto-arb-bot:latest
