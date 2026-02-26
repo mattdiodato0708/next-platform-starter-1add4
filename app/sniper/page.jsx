@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 const POLL_INTERVAL = 3000;
 
@@ -223,6 +223,9 @@ export default function SniperPage() {
                 </div>
             </div>
 
+            {/* ── Replit Setup paste-box ── */}
+            <ReplitSetup />
+
             {/* ── Activity log ── */}
             <div className="flex flex-col gap-2">
                 <h2 className="text-lg font-semibold">📋 Activity Log</h2>
@@ -251,6 +254,89 @@ export default function SniperPage() {
                         <span className="text-slate-600">No activity yet. Start the bot to begin.</span>
                     )}
                 </div>
+            </div>
+        </div>
+    );
+}
+
+// ─── Replit Setup paste-box ────────────────────────────────────────────────
+
+const REPLIT_SNIPPET = `# ── Paste this into your Replit Secrets (or .env file) ──────────────────────
+# In Replit: click the 🔒 "Secrets" tab in the left sidebar,
+# then add each variable below as a new secret.
+
+# Ethereum / BSC JSON-RPC endpoint (use Infura, Alchemy, QuickNode, etc.)
+RPC_URL=https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID
+
+# Your trading wallet private key (keep this secret – never commit it!)
+WALLET_PRIVATE_KEY=0xYOUR_PRIVATE_KEY_HERE
+
+# ── Bot behaviour ─────────────────────────────────────────────────────────────
+# The bot scans the mempool consistently on every tick (no random skipping).
+# Adjust the values below to tune your strategy:
+MIN_LIQUIDITY_ETH=1
+MAX_LIQUIDITY_ETH=50
+BUY_AMOUNT_ETH=0.05
+SLIPPAGE_PERCENT=10
+GAS_MULTIPLIER=1.2
+TAKE_PROFIT_PERCENT=50
+STOP_LOSS_PERCENT=20
+MAX_OPEN_POSITIONS=5
+
+# ── How to run in Replit ──────────────────────────────────────────────────────
+# 1. Open your Replit project.
+# 2. Click the 🔒 "Secrets" icon in the left sidebar.
+# 3. Add each KEY=value pair above as a separate secret.
+# 4. Open the Shell tab and run:  npm run dev
+# 5. Navigate to /sniper in the preview, then click ▶ Start.
+# The bot now scans every tick and executes trades automatically.`;
+
+function ReplitSetup() {
+    const [copied, setCopied] = useState(false);
+    const textRef = useRef(null);
+
+    function handleCopy() {
+        navigator.clipboard
+            .writeText(REPLIT_SNIPPET)
+            .then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            })
+            .catch(() => {
+                // Fallback for environments without clipboard API
+                if (textRef.current) {
+                    textRef.current.select();
+                    document.execCommand('copy');
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                }
+            });
+    }
+
+    return (
+        <div className="flex flex-col gap-3">
+            <h2 className="text-lg font-semibold">📋 Replit Setup — Paste Box</h2>
+            <p className="text-sm text-slate-400">
+                Copy the snippet below and paste it into your Replit{' '}
+                <span className="text-teal-400 font-mono">Secrets</span> (🔒 left sidebar) or{' '}
+                <span className="text-teal-400 font-mono">.env</span> file. The bot will then
+                scan the mempool <strong>consistently on every tick</strong> and automatically
+                execute buy / sell trades based on your strategy settings.
+            </p>
+            <div className="relative">
+                <textarea
+                    ref={textRef}
+                    readOnly
+                    rows={28}
+                    value={REPLIT_SNIPPET}
+                    className="w-full rounded-lg bg-slate-900 border border-slate-700 p-4 font-mono text-xs text-slate-300 resize-none focus:outline-none focus:border-teal-500"
+                />
+                <button
+                    onClick={handleCopy}
+                    className="absolute top-3 right-3 btn btn-sm bg-teal-700 hover:bg-teal-600 text-white"
+                >
+                    {copied ? '✓ Copied!' : 'Copy'}
+                </button>
             </div>
         </div>
     );
