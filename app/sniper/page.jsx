@@ -20,6 +20,7 @@ export default function SniperPage() {
     const [config, setConfig] = useState(defaultConfig);
     const [configSaved, setConfigSaved] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null);
 
     const fetchStatus = useCallback(async () => {
         try {
@@ -39,20 +40,37 @@ export default function SniperPage() {
         if (status?.config) setConfig(status.config);
     }, [status?.running]); // only on start/stop, not every poll
 
+    function showError(msg) {
+        setErrorMsg(msg);
+        setTimeout(() => setErrorMsg(null), 5000);
+    }
+
     async function handleStart() {
         setLoading(true);
-        await fetch('/api/sniper/start', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ config })
-        });
+        try {
+            const res = await fetch('/api/sniper/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ config })
+            });
+            const data = await res.json();
+            if (!data.started) showError(data.message || 'Failed to start bot');
+        } catch (err) {
+            showError(err.message);
+        }
         await fetchStatus();
         setLoading(false);
     }
 
     async function handleStop() {
         setLoading(true);
-        await fetch('/api/sniper/stop', { method: 'POST' });
+        try {
+            const res = await fetch('/api/sniper/stop', { method: 'POST' });
+            const data = await res.json();
+            if (!data.stopped) showError(data.message || 'Failed to stop bot');
+        } catch (err) {
+            showError(err.message);
+        }
         await fetchStatus();
         setLoading(false);
     }
@@ -96,6 +114,13 @@ export default function SniperPage() {
                     strategy, and sells when your take-profit or stop-loss is hit.
                 </p>
             </div>
+
+            {/* ── Workspace error banner ── */}
+            {errorMsg && (
+                <div className="px-4 py-3 rounded-lg bg-red-900/50 border border-red-700 text-red-300 text-sm font-medium">
+                    ⚠️ Runner workspace error: {errorMsg}
+                </div>
+            )}
 
             {/* ── Status bar ── */}
             <div className="flex flex-wrap items-center gap-4 p-4 rounded-lg bg-slate-800 border border-slate-700">

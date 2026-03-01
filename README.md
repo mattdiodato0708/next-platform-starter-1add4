@@ -44,6 +44,10 @@ cp .env.example .env.local
 | `NETLIFY_DEV` | No | Set to `true` automatically by the `netlify dev` CLI. Do not set manually. |
 | `NEXT_PUBLIC_DISABLE_UPLOADS` | No | Set to `true` to disable the blob upload feature in the UI. |
 | `TRADE_EXECUTOR_URL` | No | Base URL of the external trade-executor service (e.g. `https://trade-executer--mdobby070811.replit.app`). |
+| `RPC_URL` | No* | Ethereum JSON-RPC or WebSocket endpoint (e.g. from Infura or Alchemy). Required by the Sniper Bot and Vault Bot. Use a `wss://` URL for live mempool monitoring. |
+| `WALLET_PRIVATE_KEY` | No* | Private key of the trading wallet used by the Sniper Bot and Vault Bot to sign transactions. **Never commit this value.** |
+
+\* Required only when using the Sniper Bot or Vault Bot features.
 
 ### Setting variables on Netlify
 

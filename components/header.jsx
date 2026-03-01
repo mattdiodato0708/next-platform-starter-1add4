@@ -12,7 +12,8 @@ const navItems = [
     { linkText: 'Classics', href: '/classics' },
     { linkText: 'Middleware', href: '/middleware' },
     { linkText: 'Routing', href: '/routing' },
-    { linkText: '🎯 Sniper Bot', href: '/sniper' }
+    { linkText: '🎯 Sniper Bot', href: '/sniper' },
+    { linkText: '🏦 Vault', href: '/vault' }
 ];
 
 export function Header() {
