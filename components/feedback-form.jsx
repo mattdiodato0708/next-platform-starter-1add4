@@ -17,8 +17,7 @@ export function FeedbackForm() {
             const formData = new FormData(myForm);
             const res = await fetch('/__forms.html', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formData).toString()
+                body: formData
             });
             if (res.status === 200) {
                 setStatus('ok');
@@ -40,6 +39,10 @@ export function FeedbackForm() {
                     <input name="name" type="text" placeholder="Name" required className="input" />
                     <input name="email" type="email" placeholder="Email (optional)" className="input" />
                     <input name="message" type="text" placeholder="Message" required className="input" />
+                    <label className="flex flex-col gap-1 text-sm text-white">
+                        <span>Screenshot (optional)</span>
+                        <input name="screenshot" type="file" accept="image/*" className="input bg-white/10 text-white file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-content file:cursor-pointer" />
+                    </label>
                     <button className="btn" type="submit" disabled={status === 'pending'}>
                         Submit
                     </button>
