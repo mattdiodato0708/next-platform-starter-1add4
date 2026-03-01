@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-const POLL_INTERVAL = 3000;
-
 const defaultConfig = {
     minLiquidityEth: 1,
     maxLiquidityEth: 50,
@@ -28,10 +26,32 @@ export default function SniperPage() {
         } catch (_) {}
     }, []);
 
+    // Subscribe to real-time SSE stream; fall back to polling if SSE fails
     useEffect(() => {
-        fetchStatus();
-        const id = setInterval(fetchStatus, POLL_INTERVAL);
-        return () => clearInterval(id);
+        let es;
+        let fallbackId;
+
+        function connect() {
+            es = new EventSource('/api/sniper/stream');
+            es.onmessage = (event) => {
+                try {
+                    setStatus(JSON.parse(event.data));
+                } catch (_) {}
+            };
+            es.onerror = () => {
+                es.close();
+                // Fall back to a single poll then retry SSE after 5 s
+                fetchStatus();
+                clearTimeout(fallbackId);
+                fallbackId = setTimeout(connect, 5000);
+            };
+        }
+
+        connect();
+        return () => {
+            clearTimeout(fallbackId);
+            es?.close();
+        };
     }, [fetchStatus]);
 
     // Sync config form with server config once we have it
