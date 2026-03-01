@@ -6,6 +6,11 @@ modules = ["nodejs-20"]
 [nix]
 channel = "stable-24_11"
 
+[deployment]
+deploymentTarget = "autoscale"
+build = ["sh", "-c", "npm install && npm run build"]
+run = ["sh", "-c", "npm start"]
+
 [[ports]]
 localPort = 3000
 externalPort = 80
