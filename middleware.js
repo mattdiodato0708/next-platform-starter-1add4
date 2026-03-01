@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export function proxy(request) {
+export function middleware(request) {
   const response = NextResponse.next();
   
   // Add security headers
@@ -14,14 +14,15 @@ export function proxy(request) {
   const pathname = request.nextUrl.pathname;
   
   // Logging for demonstration (in production, use proper logging service)
-  console.log(`[Proxy] ${request.method} ${pathname} - ${new Date().toISOString()}`);
+  console.log(`[Middleware] ${request.method} ${pathname} - ${new Date().toISOString()}`);
   
   // Example: Block access to /admin paths (demonstration only)
   if (pathname.startsWith('/admin')) {
     const url = request.nextUrl.clone();
     url.pathname = '/';
-    response.headers.set('X-Blocked-Path', pathname);
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    redirectResponse.headers.set('X-Blocked-Path', pathname);
+    return redirectResponse;
   }
   
   // Example: Add custom header for API routes

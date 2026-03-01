@@ -1,5 +1,12 @@
-{ 
+{
     "compilerOptions": {
-        "baseUrl": "."
-      }    
+        "baseUrl": ".",
+        "paths": {
+            "components/*": ["components/*"],
+            "utils": ["utils.js"],
+            "app/*": ["app/*"],
+            "data/*": ["data/*"],
+            "public/*": ["public/*"]
+        }
+    }
 }
