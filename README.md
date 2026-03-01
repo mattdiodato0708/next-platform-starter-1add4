@@ -43,7 +43,7 @@ cp .env.example .env.local
 | `CONTEXT` | No | Netlify deployment context (`production`, `deploy-preview`, `branch-deploy`, `dev`). Set automatically by Netlify; override locally if needed. |
 | `NETLIFY_DEV` | No | Set to `true` automatically by the `netlify dev` CLI. Do not set manually. |
 | `NEXT_PUBLIC_DISABLE_UPLOADS` | No | Set to `true` to disable the blob upload feature in the UI. |
-| `TRADE_EXECUTOR_URL` | No | Base URL of the external trade-executor service (e.g. `https://trade-executer--mdobby070811.replit.app`). |
+| `TRADE_EXECUTOR_URL` | No | Base URL of the external trade-executor service (e.g. `https://vault-bot--diodatomatt9.replit.app`). |
 
 ### Setting variables on Netlify
 
