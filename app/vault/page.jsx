@@ -14,6 +14,7 @@ export default function VaultPage() {
     const [withdrawAsset, setWithdrawAsset] = useState('ETH');
     const [withdrawAmount, setWithdrawAmount] = useState('');
     const [actionMsg, setActionMsg] = useState(null);
+    const [signals, setSignals] = useState([]);
 
     const fetchStatus = useCallback(async () => {
         try {
@@ -22,11 +23,22 @@ export default function VaultPage() {
         } catch (_) {}
     }, []);
 
+    const fetchSignals = useCallback(async () => {
+        try {
+            const res = await fetch('/api/signals');
+            if (res.ok) {
+                const data = await res.json();
+                setSignals(data.signals ?? []);
+            }
+        } catch (_) {}
+    }, []);
+
     useEffect(() => {
         fetchStatus();
-        const id = setInterval(fetchStatus, POLL_INTERVAL);
+        fetchSignals();
+        const id = setInterval(() => { fetchStatus(); fetchSignals(); }, POLL_INTERVAL);
         return () => clearInterval(id);
-    }, [fetchStatus]);
+    }, [fetchStatus, fetchSignals]);
 
     function showMsg(type, text) {
         setActionMsg({ type, text });
@@ -330,6 +342,45 @@ export default function VaultPage() {
                         <span className="text-slate-600">
                             No vault activity yet. Deposit assets to start earning yield.
                         </span>
+                    )}
+                </div>
+            </div>
+
+            {/* ── Inter-Bot Signal Feed ── */}
+            <div className="flex flex-col gap-2">
+                <h2 className="text-lg font-semibold">📡 Inter-Bot Signal Feed</h2>
+                <p className="text-sm text-slate-400">
+                    Signals received from the{' '}
+                    <a href="/sniper" className="text-teal-400">Sniper Bot</a>.
+                    When a profitable trade completes, a{' '}
+                    <span className="font-mono text-yellow-300">PROFIT_REALIZED</span> signal is
+                    automatically received here and the profit is deposited into Aave.
+                </p>
+                <div className="rounded-lg bg-slate-900 border border-slate-700 p-3 font-mono text-xs overflow-auto max-h-48 flex flex-col gap-0.5">
+                    {signals.length > 0 ? (
+                        signals.map((sig) => (
+                            <div key={sig.id} className={
+                                sig.type === 'PROFIT_REALIZED'      ? 'text-yellow-300' :
+                                sig.type === 'VAULT_DEPOSIT_DONE'   ? 'text-green-400'  :
+                                sig.type === 'VAULT_DEPOSIT_FAILED' ? 'text-red-400'    :
+                                'text-slate-400'
+                            }>
+                                <span className="text-slate-600">
+                                    {new Date(sig.ts).toLocaleTimeString()}
+                                </span>{' '}
+                                <span className={sig.consumed ? 'opacity-50' : ''}>
+                                    [{sig.type}]{sig.consumed ? ' ✓consumed' : ' ⏳pending'}{' '}
+                                    {sig.type === 'PROFIT_REALIZED' && sig.data?.tokenSymbol &&
+                                        `${sig.data.tokenSymbol} +${Number(sig.data.pnlEth).toFixed(6)} ETH`}
+                                    {sig.type === 'VAULT_DEPOSIT_DONE' &&
+                                        `+${Number(sig.data?.pnlEth).toFixed(6)} ETH auto-deposited to Aave`}
+                                    {sig.type === 'VAULT_DEPOSIT_FAILED' &&
+                                        `failed: ${sig.data?.error}`}
+                                </span>
+                            </div>
+                        ))
+                    ) : (
+                        <span className="text-slate-600">No signals yet. Signals appear when the Sniper Bot executes profitable trades.</span>
                     )}
                 </div>
             </div>
