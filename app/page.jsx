@@ -40,7 +40,44 @@ export default function Page() {
                 <Markdown content={preDynamicContentExplainer} />
                 <RandomQuote />
             </section>
+            <section className="flex flex-col gap-4">
+                <SportsArbLink />
+            </section>
         </div>
+    );
+}
+
+function SportsArbLink() {
+    const siteUrl =
+        process.env.URL || process.env.DEPLOY_PRIME_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
+    const sportsPath = '/sports';
+    const fullUrl = siteUrl ? `${siteUrl}${sportsPath}` : sportsPath;
+
+    return (
+        <Card title="🏆 Sports Arbitrage Scanner">
+            <p>
+                Scan sportsbook odds across DraftKings, FanDuel, BetMGM, and more to find guaranteed-profit
+                arbitrage opportunities.
+            </p>
+            <Link href="/sports" className="btn btn-lg sm:min-w-64 text-center mt-2 inline-block">
+                Open Sports Arb Scanner
+            </Link>
+            {!!siteUrl && (
+                <div className="mt-4 text-sm text-neutral-500">
+                    <p className="font-semibold mb-1">Use in Expo / React Native:</p>
+                    <code
+                        aria-label="Sports page URL for mobile integration"
+                        className="block bg-neutral-100 px-3 py-2 rounded text-xs break-all select-all"
+                    >
+                        {fullUrl}
+                    </code>
+                    <p className="mt-1">
+                        Open this URL with <code>Linking.openURL()</code>, <code>WebBrowser.openBrowserAsync()</code>,
+                        or load it in a <code>&lt;WebView&gt;</code> component.
+                    </p>
+                </div>
+            )}
+        </Card>
     );
 }
 
