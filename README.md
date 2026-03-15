@@ -56,6 +56,37 @@ cp .env.example .env.local
 
 ## Deployment
 
-Deploy directly to Netlify. The `netlify.toml` file is pre-configured with the correct build settings.
+### One-click deploy
+
+Click the button below to fork this repository and deploy it to Netlify automatically:
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/mattdiodato0708/next-platform-starter-1add4)
+
+### Deploy from a zip file
+
+You can package this project as a portable zip and deploy it anywhere:
+
+1. **Create the zip:**
+   ```bash
+   npm run zip
+   ```
+   This produces a `deploy.zip` file in the project root.
+
+2. **Deploy to Netlify from the zip:**
+   ```bash
+   mkdir my-site && unzip deploy.zip -d my-site && cd my-site
+   npm install
+   npx netlify login
+   npx netlify init
+   npx netlify deploy --build --prod
+   ```
+
+3. **Or deploy via the Netlify CLI directly** (no zip needed):
+   ```bash
+   npm install -g netlify-cli
+   netlify login
+   netlify init
+   netlify deploy --build --prod
+   ```
+
+The `netlify.toml` file is pre-configured with the correct build settings, so no extra configuration is required.
