@@ -1,0 +1,41 @@
+{
+  "GLOBAL": {
+    "LOG_LEVEL": "info",
+    "POLL_INTERVAL_SEC": 10,
+    "DRY_RUN": true
+  },
+  "CAPITAL_SPLIT": {
+    "FUNDING_ARB": 0.6,
+    "AMBASSADOR_ARB": 0.4
+  },
+  "SAFETY": {
+    "GLOBAL_STOP_EQUITY_DROP_PCT": 0.15,
+    "MAX_LEVERAGE": 3
+  },
+  "TOGGLES": {
+    "FUNDING_ARB_ENABLED": true,
+    "AMBASSADOR_ARB_ENABLED": true
+  },
+  "FUNDING_ARB": {
+    "WATCHED_SYMBOLS": ["BTC/USDT", "ETH/USDT", "SOL/USDT"],
+    "MIN_FUNDING_RATE_PCT": 0.01,
+    "CLOSE_ON_FUNDING_DROP_PCT": 0.005,
+    "TAKE_PROFIT_BASIS_PCT": 0.1,
+    "MAX_POSITION_USD": 10000
+  },
+  "AMBASSADOR_ARB": {
+    "WATCHED_SYMBOLS": ["BTC/USDT", "ETH/USDT"],
+    "EXCHANGE_PAIRS": [["binance", "bybit"], ["binance", "okx"]],
+    "MIN_SPREAD_PCT": 0.05,
+    "MIN_EFFECTIVE_EDGE_PCT": 0.02,
+    "MIN_ORDER_USD": 100,
+    "MAX_POSITION_USD": 5000,
+    "MAX_OPEN_ROUTES": 3,
+    "REFERRAL_REBATE_PCT": 0.1
+  },
+  "EXCHANGE_FEE_PROFILE": {
+    "binance": {"maker": 0.02, "taker": 0.04},
+    "bybit":   {"maker": 0.01, "taker": 0.06},
+    "okx":     {"maker": 0.02, "taker": 0.05}
+  }
+}

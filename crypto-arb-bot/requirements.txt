@@ -1,0 +1,9 @@
+# crypto-arb-bot Python dependencies
+#
+# By default the bot uses only the Python standard library so it runs on
+# Replit with zero external installs.  Uncomment the packages below when
+# you are ready to connect real exchange APIs.
+
+# ccxt>=4.0.0          # Unified exchange API (Binance, Bybit, OKX, …)
+# requests>=2.31.0     # HTTP client (used by ccxt internally)
+# websocket-client>=1.6.0  # Websocket streams for real-time price data
