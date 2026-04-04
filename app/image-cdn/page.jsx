@@ -105,7 +105,7 @@ export default function Page() {
                         <div>
                             <ImageWithSizeOverlay
                                 srcSet={sampleImageSrcSet}
-                                sizes={sampleImageSrcSet}
+                                sizes="(max-width: 1024px) 100vw, 1024px"
                                 overlayPosition="right"
                             />
                         </div>

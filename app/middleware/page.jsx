@@ -20,10 +20,10 @@ Try accessing \`/admin\` to see the redirect in action. Check your browser's net
 
 const codeSnippet = `
 ~~~js
-// middleware.js
+// proxy.js
 import { NextResponse } from 'next/server';
 
-export function middleware(request) {
+export function proxy(request) {
   const response = NextResponse.next();
   
   // Add security headers
